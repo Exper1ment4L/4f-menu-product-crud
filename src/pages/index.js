@@ -1,5 +1,6 @@
 import React from 'react';
 import TextField from '../components/TextField.js';
+import ReactDOM from 'react-dom';
 import Button from '../components/Button.js'
 
 const Home = () => (
@@ -11,3 +12,5 @@ const Home = () => (
 )
 
 export default Home;
+
+ReactDOM.render(<Home />, document.getElementById('root'));
