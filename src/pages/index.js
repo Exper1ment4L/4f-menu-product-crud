@@ -12,5 +12,3 @@ const Home = () => (
 )
 
 export default Home;
-
-ReactDOM.render(<Home />, document.getElementById('root'));
