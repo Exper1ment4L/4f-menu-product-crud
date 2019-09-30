@@ -1,11 +1,15 @@
 {
+  "homepage": "https://exper1ment4l.github.io/4f-menu-product-crud",
   "name": "4f-menu-product-crud",
   "version": "0.1.0",
   "private": true,
+  
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "next": "9.0.7",
@@ -16,6 +20,7 @@
   },
   "devDependencies": {
     "eslint": "^6.5.0",
-    "eslint-plugin-react": "^7.14.3"
+    "eslint-plugin-react": "^7.14.3",
+    "gh-pages": "^2.1.1"
   }
 }
