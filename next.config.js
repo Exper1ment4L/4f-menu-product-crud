@@ -5,6 +5,7 @@
 const debug = process.env.NODE_ENV !== "production";
 
 module.exports = {
+  compress: false,
   exportPathMap: function () { // /Next-React-Components
     return {
       "/": { page: "/" },
@@ -13,6 +14,10 @@ module.exports = {
     }
   },
   assetPrefix: !debug ? 'exper1ment4l.github.io/4f-menu-product-crud' : '',
+
+  devIndicators: {
+    autoPrerender: true,
+  },
   /* webpack: (config, { dev }) => {
     // Perform customizations to webpack config
     // console.log('webpack');

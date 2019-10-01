@@ -1,13 +1,88 @@
-import React from 'react';
-import TextField from '../components/TextField.js';
-import Button from '../components/Button.js'
+import React, { Component } from "react";
+import TextField from "../components/TextField";
+import Button from "../components/Button";
+import ProductList from "../components/ProductList";
+import axios from "axios";
+import { request } from "http";
 
-const Home = () => (
-  <div>
-    <h1>Add Product</h1>
-   <TextField />
-   <Button>Add</Button>
-  </div>
-)
+class index extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      price: "",
+      description: ""
+    };
+  }
 
-export default Home;
+  addProduct() {
+    axios
+      .post("http://localhost:5000/api/products", {
+        name: this.state.name,
+        price: this.state.price,
+        description: this.state.description
+      })
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+      alert(this.state.name +""+ "Added successfully.")
+  }
+
+  handleInputChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Add new product</h1>
+        <table>
+          <tr>
+            <td>Name</td>
+            <td>Price</td>
+            <td>Description</td>
+          </tr>
+          <tr>
+            <td>
+              <TextField
+                value={this.state.name}
+                onChange={this.handleInputChange.bind(this)}
+                placeholder="Name"
+                name="name"
+              />
+            </td>
+            <td>
+              <TextField
+                value={this.state.price}
+                onChange={this.handleInputChange.bind(this)}
+                placeholder="Price"
+                name="price"
+              />
+            </td>
+            <td>
+              <TextField
+                value={this.state.description}
+                onChange={this.handleInputChange.bind(this)}
+                placeholder="Description"
+                name="description"
+              />
+            </td>
+            <td>
+              <Button onClick={this.addProduct.bind(this)}>Add</Button>
+            </td>
+          </tr>
+        </table>
+
+        <h3>Value:{this.state.name}</h3>
+        <ProductList />
+      </div>
+    );
+  }
+}
+
+export default index;

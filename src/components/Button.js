@@ -1,11 +1,13 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import React from "react";
 
 const Button = styled.button`
-color: palevioletred;
+  background-color: ${props => props.delete ? 'red' : 'green'};
   font-size: 1em;
+  color:white;
   margin: 1em;
   padding: 0.25em 1em;
-  border: 2px solid palevioletred;
+  border-color:transparent;
   border-radius: 3px;
 `;
 
