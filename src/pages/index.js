@@ -3,7 +3,6 @@ import TextField from "../components/TextField";
 import Button from "../components/Button";
 import ProductList from "../components/ProductList";
 import axios from "axios";
-import { request } from "http";
 
 class index extends Component {
   constructor(props) {
@@ -39,7 +38,8 @@ class index extends Component {
 
   render() {
     return (
-      <div>
+      <div align="center">
+        <h1>4F</h1>
         <h1>Add new product</h1>
         <table>
           <tr>
@@ -78,7 +78,7 @@ class index extends Component {
           </tr>
         </table>
 
-        <h3>Value:{this.state.name}</h3>
+        <h2 align="center">List of products</h2>
         <ProductList />
       </div>
     );

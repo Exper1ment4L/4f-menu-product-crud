@@ -2,9 +2,9 @@ import styled from "styled-components";
 import React from "react";
 
 const Button = styled.button`
-  background-color: ${props => props.delete ? 'red' : 'green'};
+  background-color: ${props => props.delete ? 'red' : props.update? '#ffc107' : 'green'};
   font-size: 1em;
-  color:white;
+  color: ${props => props.update? 'black' : 'white'};
   margin: 1em;
   padding: 0.25em 1em;
   border-color:transparent;
@@ -12,3 +12,4 @@ const Button = styled.button`
 `;
 
 export default Button;
+
