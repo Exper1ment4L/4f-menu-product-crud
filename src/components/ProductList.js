@@ -2,32 +2,44 @@ import React, { Component } from "react";
 import Button from "./Button";
 import TextField from "../components/TextField";
 import { inject,observer } from 'mobx-react';
-import store from "../stores/store";
 
 @inject('store')
 @observer
 class ProductList extends Component {
-
+  
+  
+  constructor(props) {
+    super(props);
+    const { store } = this.props;
+    store.getAll();
+  }
+  
   addProduct() {
+    const { store } = this.props;
     store.addProduct()
   }
   deleteProduct(id) {
+    const { store } = this.props;
     store.id=id;
     console.log("asdasd")
     store.deleteProduct()
   }
   handleNameChange(e) {
+    const { store } = this.props;
     store.name = e.target.value
   }
   handlePriceChange(e) {
+    const { store } = this.props;
     store.price = e.target.value
   }
   handleDescChange(e) {
+    const { store } = this.props;
     store.description = e.target.value
   }
 
   updateHandler(id) {
-    const updated = store.products.filter(product=> product._id == id)
+    const { store } = this.props;
+    const updated = this.props.store.products.filter(product=> product._id == id)
     store.id = updated[0]._id;
     store.name = updated[0].name;
     store.price = updated[0].price;
@@ -36,11 +48,13 @@ class ProductList extends Component {
   }
 
   updateProduct() {
+    const { store } = this.props;
     store.updateProduct();
-    this.resetStore()
+    this.resetstore()
   }
   
-  resetStore() {
+  resetstore() {
+    const { store } = this.props;
     store.id = ""
     store.name = ""
     store.price =""
@@ -49,6 +63,7 @@ class ProductList extends Component {
   }
 
   render() {
+    const { store } = this.props;
     return (
       <div>
         <div align="center">

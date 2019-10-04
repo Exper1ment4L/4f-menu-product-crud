@@ -1,4 +1,4 @@
-import { observable, action, computed, observe } from 'mobx';
+import { observable, action} from 'mobx';
 import axios from 'axios';
 
 class Store {
@@ -10,9 +10,6 @@ class Store {
   @observable description
   @observable isEdit = false
 
-  constructor() {
-    this.getAll();
-  }
 
   @action addProduct() {
     console.log(this.name)
