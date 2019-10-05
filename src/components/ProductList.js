@@ -7,9 +7,8 @@ import { inject,observer } from 'mobx-react';
 @observer
 class ProductList extends Component {
   
-  
-  constructor(props) {
-    super(props);
+
+  componentWillMount() {
     const { store } = this.props;
     store.getAll();
   }
@@ -20,31 +19,31 @@ class ProductList extends Component {
   }
   deleteProduct(id) {
     const { store } = this.props;
-    store.id=id;
+    store.setId(id);
     console.log("asdasd")
     store.deleteProduct()
   }
   handleNameChange(e) {
     const { store } = this.props;
-    store.name = e.target.value
+    store.setName(e.target.value);
   }
   handlePriceChange(e) {
     const { store } = this.props;
-    store.price = e.target.value
+    store.setPrice(e.target.value);
   }
   handleDescChange(e) {
     const { store } = this.props;
-    store.description = e.target.value
+    store.setDescription(e.target.value);
   }
 
   updateHandler(id) {
     const { store } = this.props;
     const updated = this.props.store.products.filter(product=> product._id == id)
-    store.id = updated[0]._id;
-    store.name = updated[0].name;
-    store.price = updated[0].price;
-    store.description = updated[0].description;
-    store.isEdit=true;
+    store.setId(updated[0]._id);
+    store.setName(updated[0].name);
+    store.setPrice(updated[0].price);
+    store.setDescription(updated[0].description);
+    store.setEdit(true);
   }
 
   updateProduct() {
@@ -55,10 +54,10 @@ class ProductList extends Component {
   
   resetstore() {
     const { store } = this.props;
-    store.id = ""
-    store.name = ""
-    store.price =""
-    store.description=""
+    store.setId("");
+    store.setName("");
+    store.setPrice("");
+    store.setDescription("");
     store.isEdit=false;
   }
 
@@ -78,7 +77,7 @@ class ProductList extends Component {
           <tr>
             <td>
               <TextField
-                value={store.name}
+                value={store.product.name}
                 onChange={this.handleNameChange.bind(this)}
                 placeholder="Name"
                 name="name"
@@ -86,7 +85,7 @@ class ProductList extends Component {
             </td>
             <td>
               <TextField
-                value={store.price}
+                value={store.product.price}
                 onChange={this.handlePriceChange.bind(this)}
                 placeholder="Price"
                 name="price"
@@ -94,7 +93,7 @@ class ProductList extends Component {
             </td>
             <td>
               <TextField
-                value={store.description}
+                value={store.product.description}
                 onChange={this.handleDescChange.bind(this)}
                 placeholder="Description"
                 name="description"
@@ -119,7 +118,7 @@ class ProductList extends Component {
           </tr>
         </thead>
         <tbody align="center">
-          {store.products.map(product => (
+          {store.products.length>0 ? store.products.map(product => (
             <tr key={product._id}>
               <th scope="row">{store.products.indexOf(product) + 1}</th>
               <td>{product._id}</td>
@@ -141,7 +140,7 @@ class ProductList extends Component {
                 </Button>
               </td>
             </tr>
-          ))}
+          )):null}
         </tbody>
       </table>
       </div>
