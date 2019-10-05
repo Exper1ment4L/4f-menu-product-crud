@@ -20,7 +20,6 @@ class ProductList extends Component {
   deleteProduct(id) {
     const { store } = this.props;
     store.setId(id);
-    console.log("asdasd")
     store.deleteProduct()
   }
   handleNameChange(e) {
@@ -39,10 +38,12 @@ class ProductList extends Component {
   updateHandler(id) {
     const { store } = this.props;
     const updated = this.props.store.products.filter(product=> product._id == id)
-    store.setId(updated[0]._id);
-    store.setName(updated[0].name);
-    store.setPrice(updated[0].price);
-    store.setDescription(updated[0].description);
+    store.setProduct({
+      id:updated[0]._id,
+      name:updated[0].name,
+      price:updated[0].price,
+      description:updated[0].description
+    });
     store.setEdit(true);
   }
 
@@ -54,10 +55,12 @@ class ProductList extends Component {
   
   resetstore() {
     const { store } = this.props;
-    store.setId("");
-    store.setName("");
-    store.setPrice("");
-    store.setDescription("");
+    store.setProduct({
+      id:"",
+      name:"",
+      price:"",
+      description:""
+    });
     store.isEdit=false;
   }
 
