@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import Button from "./Button";
-import TextField from "../components/TextField";
-import { inject, observer } from "mobx-react";
+import React, { Component } from 'react';
+import Button from './Button';
+import TextField from '../components/TextField';
+import { inject, observer } from 'mobx-react';
 
-@inject("store")
+@inject('store')
 @observer
 class ProductList extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { store } = this.props;
     store.getAll();
   }
@@ -43,7 +43,7 @@ class ProductList extends Component {
       id: updated[0]._id,
       name: updated[0].name,
       price: updated[0].price,
-      description: updated[0].description
+      description: updated[0].description,
     });
     store.setEdit(true);
   }
@@ -57,10 +57,10 @@ class ProductList extends Component {
   resetstore() {
     const { store } = this.props;
     store.setProduct({
-      id: "",
-      name: "",
-      price: "",
-      description: ""
+      id: '',
+      name: '',
+      price: '',
+      description: '',
     });
     store.isEdit = false;
   }
@@ -72,50 +72,52 @@ class ProductList extends Component {
         <div align="center">
           <h1>4F</h1>
           <h1>
-            {store.isEdit == false ? "Add new product" : "Updating product"}
+            {store.isEdit == false ? 'Add new product' : 'Updating product'}
           </h1>
           <table>
-            <tr>
-              <td>Name</td>
-              <td>Price</td>
-              <td>Description</td>
-            </tr>
-            <tr>
-              <td>
-                <TextField
-                  value={store.product.name}
-                  onChange={this.handleNameChange.bind(this)}
-                  placeholder="Name"
-                  name="name"
-                />
-              </td>
-              <td>
-                <TextField
-                  value={store.product.price}
-                  onChange={this.handlePriceChange.bind(this)}
-                  placeholder="Price"
-                  name="price"
-                />
-              </td>
-              <td>
-                <TextField
-                  value={store.product.description}
-                  onChange={this.handleDescChange.bind(this)}
-                  placeholder="Description"
-                  name="description"
-                />
-              </td>
-              <td>
-                {store.isEdit == false ? (
-                  <Button onClick={this.addProduct.bind(this)}>Add</Button>
-                ) : null}
-                {store.isEdit == true ? (
-                  <Button update onClick={this.updateProduct.bind(this)}>
-                    Update
-                  </Button>
-                ) : null}
-              </td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>Name</td>
+                <td>Price</td>
+                <td>Description</td>
+              </tr>
+              <tr>
+                <td>
+                  <TextField
+                    value={store.product.name}
+                    onChange={this.handleNameChange.bind(this)}
+                    placeholder="Name"
+                    name="name"
+                  />
+                </td>
+                <td>
+                  <TextField
+                    value={store.product.price}
+                    onChange={this.handlePriceChange.bind(this)}
+                    placeholder="Price"
+                    name="price"
+                  />
+                </td>
+                <td>
+                  <TextField
+                    value={store.product.description}
+                    onChange={this.handleDescChange.bind(this)}
+                    placeholder="Description"
+                    name="description"
+                  />
+                </td>
+                <td>
+                  {store.isEdit == false ? (
+                    <Button onClick={this.addProduct.bind(this)}>Add</Button>
+                  ) : null}
+                  {store.isEdit == true ? (
+                    <Button update onClick={this.updateProduct.bind(this)}>
+                      Update
+                    </Button>
+                  ) : null}
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
         <table border="1" align="center" width="50%">
@@ -126,7 +128,7 @@ class ProductList extends Component {
               <th scope="col">Name</th>
               <th scope="col">Price</th>
               <th scope="col">Description</th>
-              <th scope="col">Edit</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody align="center">
@@ -138,7 +140,7 @@ class ProductList extends Component {
                     <td>{product.name}</td>
                     <td>{product.price}</td>
                     <td>{product.description}</td>
-                    <td align="left" width="250px">
+                    <td>
                       <Button
                         delete
                         onClick={this.deleteProduct.bind(this, product._id)}

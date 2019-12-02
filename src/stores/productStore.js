@@ -10,7 +10,6 @@ class Store {
     price: "",
     description: ""
   };
-
   @action addProduct() {
     console.log(this.name);
     axios
