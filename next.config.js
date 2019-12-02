@@ -2,16 +2,17 @@
 // So, we write it in vanilla JS
 // (But you could use ES2015 features supported by your Node.js version)
 
-const debug = process.env.NODE_ENV !== "production";
+const debug = process.env.NODE_ENV !== 'production';
 
 module.exports = {
   compress: false,
-  exportPathMap: function () { // /Next-React-Components
+  exportPathMap: function() {
+    // /Next-React-Components
     return {
-      "/": { page: "/" },
-      "/ap-grid-layout": { page: "/ap-grid-layout" },
-      "/ap-highlight": { page: "/ap-highlight" },
-    }
+      '/': { page: '/' },
+      '/ap-grid-layout': { page: '/ap-grid-layout' },
+      '/ap-highlight': { page: '/ap-highlight' },
+    };
   },
   assetPrefix: !debug ? 'exper1ment4l.github.io/4f-menu-product-crud' : '',
 
@@ -32,4 +33,4 @@ module.exports = {
     // Important: return the modified config
     return config
   }, */
-}
+};

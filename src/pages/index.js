@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import ProductList from "../components/ProductList";
-import { Provider } from "mobx-react";
-import store from "../stores/productStore";
+import React, { Component } from 'react';
+import ProductList from '../components/ProductList';
+import { Provider } from 'mobx-react';
+import store from '../stores/productStore';
 
 class Home extends Component {
   render() {

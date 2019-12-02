@@ -6,25 +6,23 @@ const bcrypt = require('bcryptjs');
 const salt = 12;
 const User = require('../../models/User');
 
-
 // GET ALL USERS
 router.get('/', (req, res) => {
-  console.log('getting user');
   const promise = User.find({});
   promise.then(users => {
-    res.json({ status: true, users });
+    res.json({ success: true, data: users });
   });
 });
 
 // GET USER BY ID
 router.get('/:id', (req, res) => {
-  const promise = User.findById({ _id: id });
+  const promise = User.findById({ _id: req.params.id });
   promise
     .then(user => {
-      res.json({ status: true, user });
+      res.json({ success: true, data: user });
     })
     .catch(() => {
-      res.json({ status: false, error: 'User not found' });
+      res.json({ success: false, error: 'User not found' });
     });
 });
 
@@ -36,9 +34,9 @@ router.post('/register', (req, res) => {
   });
 
   bcrypt.hash(newUser.password, salt, (err, hash) => {
-    if (err) res.json({ status: false, err });
+    if (err) res.json({ success: false });
     newUser.password = hash;
-    newUser.save().then(user => res.json({ status: true, data: user }));
+    newUser.save().then(user => res.json({ success: true, data: user }));
   });
 });
 
@@ -49,7 +47,7 @@ router.post('/login', (req, res) => {
 
   User.findOne({ email }).then(user => {
     if (!user) {
-      res.json({ status: false, error: 'User not found' });
+      res.json({ success: false, error: 'User not found' });
     }
 
     bcrypt.compare(password, user.password).then(isMatch => {
@@ -57,10 +55,10 @@ router.post('/login', (req, res) => {
         const payload = { id: user._id, email: user.email };
 
         jwt.sign(payload, apiKey, { expiresIn: 720 }, (err, token) => {
-          res.json({ status: true, token: 'Bearer ' + token });
+          res.json({ success: true, token: 'Bearer ' + token });
         });
       } else {
-        res.status(400).json({ status: false, error: 'Wrong password' });
+        res.success(400).json({ success: false, error: 'Wrong password' });
       }
     });
   });
@@ -70,13 +68,12 @@ router.post('/login', (req, res) => {
 router.post('/authentication', verifyToken, (req, res) => {
   jwt.verify(req.token, apiKey, (err, authData) => {
     if (err) {
-      res.sendStatus(403);
+      res.sendsuccess(403);
     } else {
-      res.json({ status: true, data: authData });
+      res.json({ success: true, data: authData });
     }
   });
 });
-
 
 // VERIFY TOKEN
 // FORMAT : Bearer <token>
@@ -88,7 +85,7 @@ function verifyToken(req, res, next) {
     req.token = bearerToken;
     next();
   } else {
-    res.sendStatus(403);
+    res.sendsuccess(403);
   }
 }
 

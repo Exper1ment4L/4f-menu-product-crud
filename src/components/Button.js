@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import React from "react";
+import styled from 'styled-components';
 
 const Button = styled.button`
-  background-color: ${props => props.delete ? 'red' : props.update? '#ffc107' : 'green'};
+  background-color: ${props =>
+    props.delete ? 'red' : props.update ? '#ffc107' : 'green'};
   margin: 0.1em;
   border-color: transparent;
   border-radius: 14px;
@@ -19,4 +19,3 @@ const Button = styled.button`
 `;
 
 export default Button;
-
