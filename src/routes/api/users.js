@@ -22,8 +22,22 @@ router.get('/:id', (req, res) => {
       res.json({ success: true, data: user });
     })
     .catch(() => {
-      res.json({ success: false, error: 'User not found' });
+      res.json({
+        success: false,
+        message: 'Bu IDye sahip kullanıcı bulunamadı',
+      });
     });
+});
+
+// DELETE USER DELETE
+router.delete('/:id', (req, res) => {
+  User.findById(req.params.id)
+    .then(user =>
+      user
+        .remove()
+        .then(() => res.json({ success: true, message: 'Başarıyla Silindi' }))
+    )
+    .catch(() => res.status(404).json({ success: false }));
 });
 
 // POST USER REGISTRATION
@@ -47,18 +61,16 @@ router.post('/login', (req, res) => {
 
   User.findOne({ email }).then(user => {
     if (!user) {
-      res.json({ success: false, error: 'User not found' });
+      res.json({ success: false, message: 'Kullanıcı Bulunamadı' });
     }
-
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         const payload = { id: user._id, email: user.email };
-
         jwt.sign(payload, apiKey, { expiresIn: 720 }, (err, token) => {
           res.json({ success: true, token: 'Bearer ' + token });
         });
       } else {
-        res.success(400).json({ success: false, error: 'Wrong password' });
+        res.json({ success: false, message: 'Hatalı Şifre' });
       }
     });
   });

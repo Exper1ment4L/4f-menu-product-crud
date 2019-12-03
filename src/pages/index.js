@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ProductList from '../components/ProductList';
+import ProductList from '../components/Product/ProductList';
 import { Provider } from 'mobx-react';
 import store from '../stores/productStore';
 

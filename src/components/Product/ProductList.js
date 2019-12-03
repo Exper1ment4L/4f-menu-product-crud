@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Button from './Button';
-import TextField from '../components/TextField';
+import Button from '../Button';
+import TextField from '../TextField';
 import { inject, observer } from 'mobx-react';
 
 @inject('store')
@@ -108,7 +108,7 @@ class ProductList extends Component {
                 </td>
                 <td>
                   {store.isEdit == false ? (
-                    <Button onClick={this.addProduct.bind(this)}>Add</Button>
+                    <Button success onClick={this.addProduct.bind(this)}>Add</Button>
                   ) : null}
                   {store.isEdit == true ? (
                     <Button update onClick={this.updateProduct.bind(this)}>

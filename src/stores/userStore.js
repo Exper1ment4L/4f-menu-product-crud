@@ -2,21 +2,21 @@ import { observable, action } from 'mobx';
 import axios from 'axios';
 
 class Store {
-  @observable users = ['asddsa'];
+  @observable users = [];
   @observable isEdit = false;
   @observable user = {
     id: '',
     email: '',
     password: '',
   };
-  @action addUser() {
+  @action userLogin() {
     axios
-      .post('http://localhost:5000/api/users', {
+      .post('http://localhost:5000/api/users/login', {
         email: this.user.email,
         password: this.user.password,
       })
       .then(res => {
-        res.status == 200 ? this.getAll() : console.log(res.statusText);
+        res.data.success==true ? alert('Giriş Başarılı') : res.data.success==false ? alert(res.data.message) : null;
       })
       .catch(function(error) {
         console.log(error);
@@ -41,7 +41,7 @@ class Store {
         password: this.user.password,
       })
       .then(res => {
-        res.status = 200 ? this.getAll() : console.log(res.statusText);
+        res.status == 200 ? this.getAll() : console.log(res.statusText);
       })
       .catch(error => {
         console.log(error);
