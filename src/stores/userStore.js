@@ -1,14 +1,21 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
+import Router from 'next/router';
 
-class Store {
+class UserStore {
   @observable users = [];
   @observable isEdit = false;
+  @observable isAuth = false;
+  @observable isEmailEmpty = true;
+  @observable isPasswordEmpty = true;
+  @observable message = '';
   @observable user = {
     id: '',
     email: '',
     password: '',
+    token: '',
   };
+
   @action userLogin() {
     axios
       .post('http://localhost:5000/api/users/login', {
@@ -16,35 +23,81 @@ class Store {
         password: this.user.password,
       })
       .then(res => {
-        res.data.success==true ? alert('Giriş Başarılı') : res.data.success==false ? alert(res.data.message) : null;
+        console.log(res);
+        if (res.data.success) {
+          this.setToken(res.data.token);
+          localStorage.setItem('token', res.data.token);
+          Router.push('/products');
+        } else {
+          this.setMessage(res.data.message);
+        }
       })
-      .catch(function(error) {
-        console.log(error);
+      .catch(err => {
+        this.setMessage(err);
       });
   }
 
-  @action deleteUser() {
+  @action userRegister() {
+    axios
+      .post('http://localhost:5000/api/users/register', {
+        email: this.user.email,
+        password: this.user.password,
+      })
+      .then(res => {
+        if (res.data.success) {
+          this.setMessage('Kayıt başarılı giriş yapabilirsiniz.');
+          this.setEmail('');
+          this.setPassword('');
+        } else {
+          this.setMessage(res.data.message);
+        }
+      })
+      .catch(err => {
+        this.setMessage(err);
+      });
+  }
+
+  @action userAuth() {
+    axios
+      .post(
+        'http://localhost:5000/api/users/authentication',
+        { token: this.user.token },
+        {
+          headers: { Authorization: this.user.token },
+        }
+      )
+      .then(res => {
+        console.log(res.status);
+        this.setAuth(true);
+      })
+      .catch(err => {
+        console.log(err);
+        this.setAuth(false);
+      });
+  }
+
+  @action userDelete() {
     axios
       .delete('http://localhost:5000/api/users/' + this.user.id)
       .then(res => {
-        res.status == 200 ? this.getAll() : console.log(res.statusText);
+        console.log(res.status);
       })
-      .catch(error => {
-        console.log(error);
+      .catch(err => {
+        console.log(err);
       });
   }
 
-  @action updateUser() {
+  @action userUpdate() {
     axios
       .put('http://localhost:5000/api/users/' + this.user.id, {
         email: this.user.email,
         password: this.user.password,
       })
       .then(res => {
-        res.status == 200 ? this.getAll() : console.log(res.statusText);
+        console.log(res.status);
       })
-      .catch(error => {
-        console.log(error);
+      .catch(err => {
+        console.log(err);
       });
   }
 
@@ -75,7 +128,19 @@ class Store {
   @action setUser(user) {
     this.user = user;
   }
+
+  @action setAuth(bool) {
+    this.isAuth = bool;
+  }
+
+  @action setMessage(message) {
+    this.message = message;
+  }
+
+  @action setToken(token) {
+    this.user.token = token;
+  }
 }
 
-const store = new Store();
-export default store;
+const userStore = new UserStore();
+export default userStore;

@@ -43,28 +43,28 @@ const Button = styled.button`
       background: #f8f9fa;
       color: #212529;
     `};
-    ${props =>
-      props.success &&
-      css`
-        background: #28a745;
-        color: #212529;
-      `};
+  ${props =>
+    props.success &&
+    css`
+      background: #28a745;
+      color: #212529;
+    `};
   ${props =>
     props.submit &&
     css`
       background: #007bff;
     `};
 
-    ${props =>
-      props.full &&
-      css`
-        width:100%;
-      `};
+  ${props =>
+    props.full &&
+    css`
+      width: 100%;
+    `};
 
-      ${props =>
-        props.half &&
-        css`
-          width:50%;
-        `};
+  ${props =>
+    props.half &&
+    css`
+      width: 50%;
+    `};
 `;
 export default Button;

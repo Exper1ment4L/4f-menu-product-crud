@@ -108,7 +108,9 @@ class ProductList extends Component {
                 </td>
                 <td>
                   {store.isEdit == false ? (
-                    <Button success onClick={this.addProduct.bind(this)}>Add</Button>
+                    <Button success onClick={this.addProduct.bind(this)}>
+                      Add
+                    </Button>
                   ) : null}
                   {store.isEdit == true ? (
                     <Button update onClick={this.updateProduct.bind(this)}>

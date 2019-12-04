@@ -10,7 +10,9 @@ const User = require('../../models/User');
 router.get('/', (req, res) => {
   const promise = User.find({});
   promise.then(users => {
-    res.json({ success: true, data: users });
+    users.length > 0
+      ? res.json({ success: true, data: users })
+      : res.json({ success: false, message: 'Hiçbir Kullanıcı Bulunamadı' });
   });
 });
 
@@ -50,7 +52,12 @@ router.post('/register', (req, res) => {
   bcrypt.hash(newUser.password, salt, (err, hash) => {
     if (err) res.json({ success: false });
     newUser.password = hash;
-    newUser.save().then(user => res.json({ success: true, data: user }));
+    newUser
+      .save()
+      .then(user => res.json({ success: true, data: user }))
+      .catch(() => {
+        res.json({ success: false, message: 'Kullanıcı zaten kayıtlı' });
+      });
   });
 });
 
@@ -58,7 +65,6 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-
   User.findOne({ email }).then(user => {
     if (!user) {
       res.json({ success: false, message: 'Kullanıcı Bulunamadı' });
@@ -66,7 +72,7 @@ router.post('/login', (req, res) => {
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         const payload = { id: user._id, email: user.email };
-        jwt.sign(payload, apiKey, { expiresIn: 720 }, (err, token) => {
+        jwt.sign(payload, apiKey, { expiresIn: '1h' }, (err, token) => {
           res.json({ success: true, token: 'Bearer ' + token });
         });
       } else {
@@ -80,7 +86,7 @@ router.post('/login', (req, res) => {
 router.post('/authentication', verifyToken, (req, res) => {
   jwt.verify(req.token, apiKey, (err, authData) => {
     if (err) {
-      res.sendsuccess(403);
+      res.json(err);
     } else {
       res.json({ success: true, data: authData });
     }
@@ -97,7 +103,7 @@ function verifyToken(req, res, next) {
     req.token = bearerToken;
     next();
   } else {
-    res.sendsuccess(403);
+    res.status(403);
   }
 }
 

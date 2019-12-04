@@ -12,8 +12,8 @@ app.use(bodyParser.json());
 
 app.use(
   cors({
-    allowedHeaders: ['Content-Type'],
-    exposedHeaders: ['Content-Type'],
+    allowedHeaders: ['Content-Type']['Authorization'],
+    exposedHeaders: ['Content-Type']['Authorization'],
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
@@ -35,6 +35,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
+    useCreateIndex: true,
   })
   .then(() => console.log('Database connected..'))
   .catch(err => console.log(err));

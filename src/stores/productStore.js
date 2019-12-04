@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
 
-class Store {
+class ProductStore {
   @observable products = [];
   @observable isEdit = false;
   @observable product = {
@@ -83,5 +83,5 @@ class Store {
   }
 }
 
-const store = new Store();
-export default store;
+const productStore = new ProductStore();
+export default productStore;
