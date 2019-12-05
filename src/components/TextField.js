@@ -5,6 +5,7 @@ const TextField = styled.input`
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
+  margin-right:2px;
   color: #495057;
   background-color: white;
   border: 1px solid #ced4da;
