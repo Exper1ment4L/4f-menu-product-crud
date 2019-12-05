@@ -33,7 +33,7 @@ router.post('/', (req, res) => {
     price: req.body.price,
     description: req.body.description,
   });
-  newProduct.save().then(product => res.json(product));
+  newProduct.save().then(product => res.json({success:true,product }));
 });
 
 router.delete('/:id', (req, res) => {

@@ -19,10 +19,11 @@ class ProductStore {
         description: this.product.description,
       })
       .then(response => {
-        response.status == 200 ? this.getAll() : alert('ERROR');
+        response.data.success ? this.getAll() : alert('ERROR');
+        console.log(response);
       })
       .catch(function(error) {
-        console.log(error);
+        alert(error);
       });
   }
 
