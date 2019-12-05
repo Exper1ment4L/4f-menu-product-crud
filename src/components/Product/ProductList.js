@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Button from '../Button';
 import TextField from '../TextField';
+import Container from '../Container';
+import Col from '../Col';
+import Row from '../Row';
 import { inject, observer } from 'mobx-react';
 
 @inject('store')
@@ -68,100 +71,106 @@ class ProductList extends Component {
   render() {
     const { store } = this.props;
     return (
-      <div>
-        <div align="center">
-          <h1>4F</h1>
-          <h1>
-            {store.isEdit == false ? 'Add new product' : 'Updating product'}
-          </h1>
-          <table>
-            <tbody>
-              <tr>
-                <td>Name</td>
-                <td>Price</td>
-                <td>Description</td>
-              </tr>
-              <tr>
-                <td>
-                  <TextField
-                    value={store.product.name}
-                    onChange={this.handleNameChange.bind(this)}
-                    placeholder="Name"
-                    name="name"
-                  />
-                </td>
-                <td>
-                  <TextField
-                    value={store.product.price}
-                    onChange={this.handlePriceChange.bind(this)}
-                    placeholder="Price"
-                    name="price"
-                  />
-                </td>
-                <td>
-                  <TextField
-                    value={store.product.description}
-                    onChange={this.handleDescChange.bind(this)}
-                    placeholder="Description"
-                    name="description"
-                  />
-                </td>
-                <td>
-                  {store.isEdit == false ? (
-                    <Button success onClick={this.addProduct.bind(this)}>
-                      Add
-                    </Button>
-                  ) : null}
-                  {store.isEdit == true ? (
-                    <Button update onClick={this.updateProduct.bind(this)}>
-                      Update
-                    </Button>
-                  ) : null}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <table border="1" align="center" width="50%">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Product ID</th>
-              <th scope="col">Name</th>
-              <th scope="col">Price</th>
-              <th scope="col">Description</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody align="center">
-            {store.products.length > 0
-              ? store.products.map(product => (
-                  <tr key={product._id}>
-                    <th scope="row">{store.products.indexOf(product) + 1}</th>
-                    <td>{product._id}</td>
-                    <td>{product.name}</td>
-                    <td>{product.price}</td>
-                    <td>{product.description}</td>
-                    <td>
-                      <Button
-                        delete
-                        onClick={this.deleteProduct.bind(this, product._id)}
-                      >
-                        Delete
-                      </Button>
-                      <Button
-                        update
-                        onClick={this.updateHandler.bind(this, product._id)}
-                      >
-                        Edit
-                      </Button>
-                    </td>
-                  </tr>
-                ))
-              : null}
-          </tbody>
-        </table>
-      </div>
+      <Container fluid>
+        <Row>
+          <Col>
+            <h1>
+              {store.isEdit == false
+                ? 'Ürünler Listesi  '
+                : 'Ürün Güncelleniyor'}
+            </h1>
+          </Col>
+        </Row>
+        <Row>
+          <Col md="2"></Col>
+          <Col>
+            <Row>
+              <Col>
+                <TextField
+                  value={store.product.name}
+                  onChange={this.handleNameChange.bind(this)}
+                  placeholder="Ürün Adı"
+                  name="name"
+                />
+              </Col>
+              <Col>
+                <TextField
+                  value={store.product.price}
+                  onChange={this.handlePriceChange.bind(this)}
+                  placeholder="Ürün Fiyatı"
+                  name="price"
+                />
+              </Col>
+              <Col>
+                <TextField
+                  value={store.product.description}
+                  onChange={this.handleDescChange.bind(this)}
+                  placeholder="Ürün Açıklaması"
+                  name="description"
+                />
+              </Col>
+              <Col>
+                {store.isEdit == false ? (
+                  <Button success onClick={this.addProduct.bind(this)}>
+                    Ekle
+                  </Button>
+                ) : null}
+                {store.isEdit == true ? (
+                  <Button update onClick={this.updateProduct.bind(this)}>
+                    Güncelle
+                  </Button>
+                ) : null}
+              </Col>
+            </Row>
+          </Col>
+          <Col md="2"></Col>
+        </Row>
+        <Row>
+          <Col>
+            <table border="1" align="center" width="50%">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Ürün ID</th>
+                  <th scope="col">Adı</th>
+                  <th scope="col">Fiyatı</th>
+                  <th scope="col">Açıklama</th>
+                  <th scope="col">İşlem</th>
+                </tr>
+              </thead>
+              <tbody align="center">
+                {store.products.length > 0
+                  ? store.products.map(product => (
+                      <tr key={product._id}>
+                        <th scope="row">
+                          {store.products.indexOf(product) + 1}
+                        </th>
+                        <td>{product._id}</td>
+                        <td>{product.name}</td>
+                        <td>{product.price}</td>
+                        <td>{product.description}</td>
+                        <td>
+                          <Button
+                            delete
+                            onClick={this.deleteProduct.bind(this, product._id)}
+                          >
+                            Sil
+                          </Button>
+                          <Button
+                            update
+                            onClick={this.updateHandler.bind(this, product._id)}
+                          >
+                            Düzenle
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  : null}
+              </tbody>
+            </table>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }
