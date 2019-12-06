@@ -36,6 +36,16 @@ class ProductList extends Component {
     const { store } = this.props;
     store.setDescription(e.target.value);
   }
+  handleSearchChange(e) {
+    const { store } = this.props;
+    var query = e.target.value;
+    var filteredProducts = store.products.filter(product =>
+      product.name.toLowerCase().includes(query.toLowerCase())
+    );
+    e.target.value.length > 0
+      ? store.setProducts(filteredProducts)
+      : store.getAll();
+  }
 
   updateHandler(id) {
     const { store } = this.props;
@@ -79,6 +89,7 @@ class ProductList extends Component {
                 ? 'Ürünler Listesi  '
                 : 'Ürün Güncelleniyor'}
             </h1>
+            <span>Toplam Ürün Sayısı:{store.products.length}</span>
           </Col>
         </Row>
         <Row>
@@ -126,8 +137,19 @@ class ProductList extends Component {
           <Col md="2"></Col>
         </Row>
         <Row>
+          <Col md="9">
+            <TextField
+              full
+              center
+              onChange={this.handleSearchChange.bind(this)}
+              placeholder="Aramak için ürün adı girin"
+              name="search"
+            ></TextField>
+          </Col>
+        </Row>
+        <Row>
           <Col>
-            <table border="1" align="center" width="50%">
+            <table border="1" align="center" width="100%">
               <thead>
                 <tr>
                   <th scope="col">#</th>

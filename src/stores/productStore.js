@@ -82,6 +82,9 @@ class ProductStore {
   @action setProduct(product) {
     this.product = product;
   }
+  @action setProducts(products) {
+    this.products = products;
+  }
 }
 
 const productStore = new ProductStore();
