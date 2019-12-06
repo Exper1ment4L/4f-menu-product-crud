@@ -1,8 +1,6 @@
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
-  padding-right: 15px;
-  padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
   text-align: center;
@@ -24,8 +22,7 @@ const Container = styled.div`
   ${props =>
     props.fluid &&
     css`
-      box-sizing: border-box;
-      width: 100% !important;
+      min-width: 100%;
     `}
 `;
 

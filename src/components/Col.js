@@ -11,6 +11,7 @@ const Col = styled.div`
   position: relative;
   margin-bottom: 5px;
   padding: 15px 0px;
+  margin-left: 5px;
   ${({ xs }) => (xs ? getWidth(xs) : 'width: 100%')};
   @media only screen and (min-width: < 768px) {
     ${({ sm }) => sm && getWidth(sm)};
@@ -24,7 +25,6 @@ const Col = styled.div`
   @media only screen and (max-width: 576px && min-width: 576px) {
     width: 500px;
   }
-
 `;
 
 export default Col;
