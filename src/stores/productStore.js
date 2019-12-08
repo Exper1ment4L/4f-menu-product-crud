@@ -3,7 +3,10 @@ import axios from 'axios';
 
 class ProductStore {
   @observable products = [];
+  @observable filteredProducts = [];
   @observable isEdit = false;
+  @observable query = '';
+  @observable message = '';
   @observable product = {
     id: 0,
     name: '',
@@ -18,12 +21,11 @@ class ProductStore {
         price: this.product.price,
         description: this.product.description,
       })
-      .then(response => {
-        response.data.success ? this.getAll() : alert('ERROR');
-        console.log(response);
+      .then(res => {
+        res.data.success ? this.getAll() : this.setMessage(res.data.message);
       })
       .catch(function(error) {
-        alert(error);
+        this.setMessage(error.data.message);
       });
   }
 
@@ -43,9 +45,8 @@ class ProductStore {
         price: this.product.price,
         description: this.product.description,
       })
-      .then(response => {
-        console.log(response);
-        response.status == 200 ? this.getAll() : alert('Error');
+      .then(res => {
+        res.data.success ? this.getAll() : alert('Error');
       })
       .catch(err => {
         console.log(err);
@@ -54,7 +55,13 @@ class ProductStore {
 
   @action getAll() {
     axios.get('http://localhost:5000/api/products/').then(res => {
-      this.products = res.data;
+      this.products = res.data.products;
+      this.setFilteredProducts(
+        this.products.filter(product =>
+          product.name.toLowerCase().includes(this.query.toLowerCase())
+        )
+      );
+      this.setMessage(res.data.message);
     });
     return this.products;
   }
@@ -78,12 +85,17 @@ class ProductStore {
   @action setEdit(bool) {
     this.isEdit = bool;
   }
-
   @action setProduct(product) {
     this.product = product;
   }
   @action setProducts(products) {
     this.products = products;
+  }
+  @action setFilteredProducts(products) {
+    this.filteredProducts = products;
+  }
+  @action setMessage(message) {
+    this.message = message;
   }
 }
 

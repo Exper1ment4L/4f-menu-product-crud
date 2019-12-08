@@ -13,7 +13,6 @@ class ProductList extends Component {
     const { store } = this.props;
     store.getAll();
   }
-
   addProduct() {
     const { store } = this.props;
     store.addProduct();
@@ -38,13 +37,10 @@ class ProductList extends Component {
   }
   handleSearchChange(e) {
     const { store } = this.props;
-    var query = e.target.value;
-    var filteredProducts = store.products.filter(product =>
-      product.name.toLowerCase().includes(query.toLowerCase())
+    store.query = e.target.value;
+    store.filteredProducts = store.products.filter(product =>
+      product.name.toLowerCase().includes(store.query.toLowerCase())
     );
-    e.target.value.length > 0
-      ? store.setProducts(filteredProducts)
-      : store.getAll();
   }
 
   updateHandler(id) {
@@ -89,7 +85,11 @@ class ProductList extends Component {
                 ? 'Ürünler Listesi  '
                 : 'Ürün Güncelleniyor'}
             </h1>
-            <span>Toplam Ürün Sayısı:{store.products.length}</span>
+            <span>
+              {store.query.length > 0
+                ? 'Bulunan Ürün Sayısı:' + store.filteredProducts.length
+                : 'Toplam Ürün Sayısı:' + store.products.length}
+            </span>
           </Col>
         </Row>
         <Row>
@@ -137,10 +137,16 @@ class ProductList extends Component {
           <Col md="2"></Col>
         </Row>
         <Row>
+          <Col>
+            <span>{store.message}</span>
+          </Col>
+        </Row>
+        <Row>
           <Col md="9">
             <TextField
               full
               center
+              value={store.query}
               onChange={this.handleSearchChange.bind(this)}
               placeholder="Aramak için ürün adı girin"
               name="search"
@@ -161,8 +167,35 @@ class ProductList extends Component {
                 </tr>
               </thead>
               <tbody align="center">
-                {store.products.length > 0
-                  ? store.products.map(product => (
+                {store.filteredProducts.length > 0
+                  ? store.filteredProducts.map(product => (
+                      <tr key={product._id}>
+                        <th scope="row">
+                          {store.filteredProducts.indexOf(product) + 1}
+                        </th>
+                        <td>{product._id}</td>
+                        <td>{product.name}</td>
+                        <td>{product.price}</td>
+                        <td>{product.description}</td>
+                        <td>
+                          <Button
+                            delete
+                            onClick={this.deleteProduct.bind(this, product._id)}
+                          >
+                            Sil
+                          </Button>
+                          <Button
+                            update
+                            onClick={this.updateHandler.bind(this, product._id)}
+                          >
+                            Düzenle
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  : store.query.length > 0 && store.filteredProducts.length == 0
+                  ? null
+                  : store.products.map(product => (
                       <tr key={product._id}>
                         <th scope="row">
                           {store.products.indexOf(product) + 1}
@@ -186,8 +219,7 @@ class ProductList extends Component {
                           </Button>
                         </td>
                       </tr>
-                    ))
-                  : null}
+                    ))}
               </tbody>
             </table>
           </Col>
