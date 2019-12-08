@@ -17,11 +17,12 @@
     "jsonwebtoken": "^8.5.1",
     "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",
-    "mongoose": "^5.7.13",
+    "mongoose": "^5.7.14",
     "next": "9.0.7",
     "react": "16.10.1",
     "react-dom": "16.10.1",
     "react-router-dom": "^5.1.2",
+    "serialize-javascript": "^2.1.1",
     "styled-components": "^4.4.1"
   },
   "devDependencies": {
