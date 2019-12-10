@@ -2,7 +2,7 @@
 // So, we write it in vanilla JS
 // (But you could use ES2015 features supported by your Node.js version)
 
-const debug = process.env.NODE_ENV !== 'production';
+//const debug = process.env.NODE_ENV !== 'production';
 
 module.exports = {
   compress: false,
@@ -14,7 +14,7 @@ module.exports = {
       '/ap-highlight': { page: '/ap-highlight' },
     };
   },
-  assetPrefix: !debug ? 'exper1ment4l.github.io/4f-menu-product-crud' : '',
+  //assetPrefix: !debug ? 'exper1ment4l.github.io/4f-menu-product-crud' : '',
 
   devIndicators: {
     autoPrerender: true,

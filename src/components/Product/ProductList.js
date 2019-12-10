@@ -93,7 +93,6 @@ class ProductList extends Component {
           </Col>
         </Row>
         <Row>
-          <Col md="2"></Col>
           <Col>
             <Row>
               <Col>
@@ -103,16 +102,12 @@ class ProductList extends Component {
                   placeholder="Ürün Adı"
                   name="name"
                 />
-              </Col>
-              <Col>
                 <TextField
                   value={store.product.price}
                   onChange={this.handlePriceChange.bind(this)}
                   placeholder="Ürün Fiyatı"
                   name="price"
                 />
-              </Col>
-              <Col>
                 <TextField
                   value={store.product.description}
                   onChange={this.handleDescChange.bind(this)}
@@ -120,21 +115,28 @@ class ProductList extends Component {
                   name="description"
                 />
               </Col>
+            </Row>
+            <Row>
               <Col>
-                {store.isEdit == false ? (
+              {store.isEdit == false ? (
                   <Button success onClick={this.addProduct.bind(this)}>
                     Ekle
                   </Button>
                 ) : null}
                 {store.isEdit == true ? (
-                  <Button update onClick={this.updateProduct.bind(this)}>
-                    Güncelle
-                  </Button>
+                  <Col><Button update onClick={this.updateProduct.bind(this)}>
+                  Kaydet
+                </Button>
+                <Button delete onClick={this.resetstore.bind(this)}>
+                    İptal
+                  </Button></Col>
+                  
+                  
                 ) : null}
-              </Col>
+                </Col>
             </Row>
+
           </Col>
-          <Col md="2"></Col>
         </Row>
         <Row>
           <Col>
@@ -142,10 +144,10 @@ class ProductList extends Component {
           </Col>
         </Row>
         <Row>
-          <Col md="9">
+          <Col>
             <TextField
               full
-              center
+              search
               value={store.query}
               onChange={this.handleSearchChange.bind(this)}
               placeholder="Aramak için ürün adı girin"
@@ -182,13 +184,13 @@ class ProductList extends Component {
                             delete
                             onClick={this.deleteProduct.bind(this, product._id)}
                           >
-                            Sil
+                            Kaldır
                           </Button>
                           <Button
                             update
                             onClick={this.updateHandler.bind(this, product._id)}
                           >
-                            Düzenle
+                            Güncelle
                           </Button>
                         </td>
                       </tr>
@@ -209,13 +211,13 @@ class ProductList extends Component {
                             delete
                             onClick={this.deleteProduct.bind(this, product._id)}
                           >
-                            Sil
+                            Kaldır
                           </Button>
                           <Button
                             update
                             onClick={this.updateHandler.bind(this, product._id)}
                           >
-                            Düzenle
+                            Güncelle
                           </Button>
                         </td>
                       </tr>

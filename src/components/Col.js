@@ -10,6 +10,7 @@ const Col = styled.div`
   box-sizing: border-box;
   position: relative;
   margin-bottom: 5px;
+  width: 100%;
   padding: 15px 0px;
   margin-left: 5px;
   ${({ xs }) => (xs ? getWidth(xs) : 'width: 100%')};

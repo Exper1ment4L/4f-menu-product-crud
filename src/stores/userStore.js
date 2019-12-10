@@ -26,7 +26,6 @@ class UserStore {
         console.log(res);
         if (res.data.success) {
           this.setToken(res.data.token);
-          localStorage.setItem('token', res.data.token);
           Router.push('/products');
         } else {
           this.setMessage(res.data.message);
