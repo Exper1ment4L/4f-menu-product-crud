@@ -13,34 +13,41 @@ class ProductList extends Component {
     const { store } = this.props;
     store.getAll();
   }
+
   addProduct() {
     const { store } = this.props;
-    store.addProduct();
-    this.resetstore();
+    if (
+      store.product.name.length > 0 &&
+      store.product.price > 0 &&
+      store.product.description.length > 0
+    ) {
+      store.addProduct();
+      this.resetstore();
+    } else {
+      store.setMessage('Boş geçilemez');
+    }
   }
+
+  updateProduct() {
+    const { store } = this.props;
+    if (
+      store.product.name.length > 0 &&
+      store.product.price > 0 &&
+      store.product.description.length > 0
+    ) {
+      store.updateProduct();
+      this.resetstore();
+    } else {
+      store.setMessage('Boş geçilemez');
+    }
+  }
+
   deleteProduct(id) {
     const { store } = this.props;
     store.setId(id);
-    store.deleteProduct();
-  }
-  handleNameChange(e) {
-    const { store } = this.props;
-    store.setName(e.target.value);
-  }
-  handlePriceChange(e) {
-    const { store } = this.props;
-    store.setPrice(e.target.value);
-  }
-  handleDescChange(e) {
-    const { store } = this.props;
-    store.setDescription(e.target.value);
-  }
-  handleSearchChange(e) {
-    const { store } = this.props;
-    store.query = e.target.value;
-    store.filteredProducts = store.products.filter(product =>
-      product.name.toLowerCase().includes(store.query.toLowerCase())
-    );
+    if (confirm('Ürün silinsin mi?')) {
+      store.deleteProduct(id);
+    }
   }
 
   updateHandler(id) {
@@ -57,12 +64,6 @@ class ProductList extends Component {
     store.setEdit(true);
   }
 
-  updateProduct() {
-    const { store } = this.props;
-    store.updateProduct();
-    this.resetstore();
-  }
-
   resetstore() {
     const { store } = this.props;
     store.setProduct({
@@ -72,6 +73,30 @@ class ProductList extends Component {
       description: '',
     });
     store.isEdit = false;
+    store.message = '';
+  }
+
+  handleNameChange(e) {
+    const { store } = this.props;
+    store.setName(e.target.value);
+  }
+
+  handlePriceChange(e) {
+    const { store } = this.props;
+    store.setPrice(e.target.value);
+  }
+
+  handleDescChange(e) {
+    const { store } = this.props;
+    store.setDescription(e.target.value);
+  }
+
+  handleSearchChange(e) {
+    const { store } = this.props;
+    store.query = e.target.value;
+    store.filteredProducts = store.products.filter(product =>
+      product.name.toLowerCase().includes(store.query.toLowerCase())
+    );
   }
 
   render() {
@@ -118,24 +143,23 @@ class ProductList extends Component {
             </Row>
             <Row>
               <Col>
-              {store.isEdit == false ? (
+                {store.isEdit == false ? (
                   <Button success onClick={this.addProduct.bind(this)}>
                     Ekle
                   </Button>
                 ) : null}
                 {store.isEdit == true ? (
-                  <Col><Button update onClick={this.updateProduct.bind(this)}>
-                  Kaydet
-                </Button>
-                <Button delete onClick={this.resetstore.bind(this)}>
-                    İptal
-                  </Button></Col>
-                  
-                  
+                  <Col>
+                    <Button update onClick={this.updateProduct.bind(this)}>
+                      Kaydet
+                    </Button>
+                    <Button delete onClick={this.resetstore.bind(this)}>
+                      İptal
+                    </Button>
+                  </Col>
                 ) : null}
-                </Col>
+              </Col>
             </Row>
-
           </Col>
         </Row>
         <Row>

@@ -13,6 +13,7 @@ class ProductStore {
     price: '',
     description: '',
   };
+
   @action addProduct() {
     console.log(this.name);
     axios
@@ -46,7 +47,7 @@ class ProductStore {
         description: this.product.description,
       })
       .then(res => {
-        res.data.success ? this.getAll() : alert('Error');
+        res.data.success ? this.getAll() : this.setMessage(res.data.message);
       })
       .catch(err => {
         console.log(err);
@@ -85,15 +86,19 @@ class ProductStore {
   @action setEdit(bool) {
     this.isEdit = bool;
   }
+
   @action setProduct(product) {
     this.product = product;
   }
+
   @action setProducts(products) {
     this.products = products;
   }
+
   @action setFilteredProducts(products) {
     this.filteredProducts = products;
   }
+
   @action setMessage(message) {
     this.message = message;
   }
