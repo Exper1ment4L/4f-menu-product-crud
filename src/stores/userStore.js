@@ -18,7 +18,7 @@ class UserStore {
 
   @action userLogin() {
     axios
-      .post('http://localhost:5000/api/users/login', {
+      .post('https://api-4f.herokuapp.com/api/users/login', {
         email: this.user.email,
         password: this.user.password,
       })
@@ -38,7 +38,7 @@ class UserStore {
 
   @action userRegister() {
     axios
-      .post('http://localhost:5000/api/users/register', {
+      .post('https://api-4f.herokuapp.com/api/users/register', {
         email: this.user.email,
         password: this.user.password,
       })
@@ -59,7 +59,7 @@ class UserStore {
   @action userAuth() {
     axios
       .post(
-        'http://localhost:5000/api/users/authentication',
+        'https://api-4f.herokuapp.com/api/users/authentication',
         { token: this.user.token },
         {
           headers: { Authorization: this.user.token },
@@ -77,7 +77,7 @@ class UserStore {
 
   @action userDelete() {
     axios
-      .delete('http://localhost:5000/api/users/' + this.user.id)
+      .delete('https://api-4f.herokuapp.com/api/users/' + this.user.id)
       .then(res => {
         console.log(res.status);
       })
@@ -88,7 +88,7 @@ class UserStore {
 
   @action userUpdate() {
     axios
-      .put('http://localhost:5000/api/users/' + this.user.id, {
+      .put('https://api-4f.herokuapp.com/api/users/' + this.user.id, {
         email: this.user.email,
         password: this.user.password,
       })
@@ -101,7 +101,7 @@ class UserStore {
   }
 
   @action getAll() {
-    axios.get('http://localhost:5000/api/users/').then(res => {
+    axios.get('https://api-4f.herokuapp.com/api/users/').then(res => {
       this.users = res.users;
     });
     console.log(this.users);
