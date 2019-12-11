@@ -1,6 +1,8 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
 import Router from 'next/router';
+import Cryptr from 'cryptr';
+const cryptr = new Cryptr('secretCryptoKey');
 
 class UserStore {
   @observable users = [];
@@ -26,6 +28,7 @@ class UserStore {
         console.log(res);
         if (res.data.success) {
           this.setToken(res.data.token);
+          localStorage.setItem('token', cryptr.encrypt(res.data.token));
           Router.push('/products');
         } else {
           this.setMessage(res.data.message);
@@ -60,18 +63,15 @@ class UserStore {
     axios
       .post(
         'https://api-4f.herokuapp.com/api/users/authentication',
-        { token: this.user.token },
         {
-          headers: { Authorization: this.user.token },
-        }
+          token:cryptr.decrypt(localStorage.getItem('token'))
+        },
       )
       .then(res => {
-        console.log(res.status);
-        this.setAuth(true);
+        console.log(JSON.stringify(res));
       })
-      .catch(err => {
-        console.log(err);
-        this.setAuth(false);
+      .catch(res => {
+        console.log('Error:' + res.message);
       });
   }
 

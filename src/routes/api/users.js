@@ -96,11 +96,11 @@ router.post('/authentication', verifyToken, (req, res) => {
 // VERIFY TOKEN
 // FORMAT : Bearer <token>
 function verifyToken(req, res, next) {
-  const bearerHeader = req.headers['authorization'];
-  if (typeof bearerHeader !== 'undefined') {
-    const bearer = bearerHeader.split(' ');
-    const bearerToken = bearer[1];
-    req.token = bearerToken;
+  const bearerToken = req.body.token;
+  if (typeof bearerToken !== 'undefined') {
+    const bearer = bearerToken.split(' ');
+    const token = bearer[1];
+    req.token = token;
     next();
   } else {
     res.status(403);
