@@ -31,8 +31,10 @@ class ProductStore {
   }
 
   @action deleteProduct() {
+    
+    console.log(this.product.id);
     axios
-      .delete('https://api-4f.herokuapp.com/api/products' + this.product.id)
+      .delete('https://api-4f.herokuapp.com/api/products/' + this.product.id)
       .then(res => {
         console.log(res);
         res.status == 200 ? this.getAll() : alert('ERROR');
@@ -41,7 +43,7 @@ class ProductStore {
 
   @action updateProduct() {
     axios
-      .put('https://api-4f.herokuapp.com/api/products' + this.product.id, {
+      .put('https://api-4f.herokuapp.com/api/products/' + this.product.id, {
         name: this.product.name,
         price: this.product.price,
         description: this.product.description,
