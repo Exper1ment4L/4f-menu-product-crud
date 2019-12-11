@@ -6,114 +6,120 @@ import Col from '../Col';
 import Row from '../Row';
 import { inject, observer } from 'mobx-react';
 
-@inject('store')
+@inject('ProductStore')
+@inject('UserStore')
 @observer
 class ProductList extends Component {
   componentDidMount() {
-    const { store } = this.props;
-    store.getAll();
+    const { ProductStore , UserStore} = this.props;
+    ProductStore.getAll();
+    UserStore.userAuth();
   }
 
   addProduct() {
-    const { store } = this.props;
+    const { ProductStore , UserStore} = this.props;
     if (
-      store.product.name.length > 0 &&
-      store.product.price > 0 &&
-      store.product.description.length > 0
+      ProductStore.product.name.length > 0 &&
+      ProductStore.product.price > 0 &&
+      ProductStore.product.description.length > 0 &&
+      UserStore.isAuth
     ) {
-      store.addProduct();
-      this.resetstore();
+      ProductStore.addProduct();
+      this.resetProductStore();
     } else {
-      store.setMessage('Boş geçilemez');
+      ProductStore.setMessage('Boş geçilemez');
     }
   }
 
   updateProduct() {
-    const { store } = this.props;
+    const { ProductStore, UserStore} = this.props;
     if (
-      store.product.name.length > 0 &&
-      store.product.price > 0 &&
-      store.product.description.length > 0
+      ProductStore.product.name.length > 0 &&
+      ProductStore.product.price > 0 &&
+      ProductStore.product.description.length > 0 &&
+      UserStore.isAuth
     ) {
-      store.updateProduct();
-      this.resetstore();
+      ProductStore.updateProduct();
+      this.resetProductStore();
     } else {
-      store.setMessage('Boş geçilemez');
+      ProductStore.setMessage('Boş geçilemez');
     }
   }
 
   deleteProduct(id) {
-    const { store } = this.props;
-    store.setId(id);
-    if (confirm('Ürün silinsin mi?')) {
-      store.deleteProduct(id);
+    const { ProductStore, UserStore } = this.props;
+    ProductStore.setId(id);
+    if(UserStore.isAuth) {
+      if (confirm('Ürün silinsin mi?')) {
+        ProductStore.deleteProduct(id);
+      }
     }
   }
 
   updateHandler(id) {
-    const { store } = this.props;
-    const updated = this.props.store.products.filter(
+    const { ProductStore } = this.props;
+    const updated = this.props.ProductStore.products.filter(
       product => product._id == id
     );
-    store.setProduct({
+    ProductStore.setProduct({
       id: updated[0]._id,
       name: updated[0].name,
       price: updated[0].price,
       description: updated[0].description,
     });
-    store.setEdit(true);
+    ProductStore.setEdit(true);
   }
 
-  resetstore() {
-    const { store } = this.props;
-    store.setProduct({
+  resetProductStore() {
+    const { ProductStore } = this.props;
+    ProductStore.setProduct({
       id: '',
       name: '',
       price: '',
       description: '',
     });
-    store.isEdit = false;
-    store.message = '';
+    ProductStore.isEdit = false;
+    ProductStore.message = '';
   }
 
   handleNameChange(e) {
-    const { store } = this.props;
-    store.setName(e.target.value);
+    const { ProductStore } = this.props;
+    ProductStore.setName(e.target.value);
   }
 
   handlePriceChange(e) {
-    const { store } = this.props;
-    store.setPrice(e.target.value);
+    const { ProductStore } = this.props;
+    ProductStore.setPrice(e.target.value);
   }
 
   handleDescChange(e) {
-    const { store } = this.props;
-    store.setDescription(e.target.value);
+    const { ProductStore } = this.props;
+    ProductStore.setDescription(e.target.value);
   }
 
   handleSearchChange(e) {
-    const { store } = this.props;
-    store.query = e.target.value;
-    store.filteredProducts = store.products.filter(product =>
-      product.name.toLowerCase().includes(store.query.toLowerCase())
+    const { ProductStore } = this.props;
+    ProductStore.query = e.target.value;
+    ProductStore.filteredProducts = ProductStore.products.filter(product =>
+      product.name.toLowerCase().includes(ProductStore.query.toLowerCase())
     );
   }
 
   render() {
-    const { store } = this.props;
+    const { ProductStore } = this.props;
     return (
       <Container fluid>
         <Row>
           <Col>
             <h1>
-              {store.isEdit == false
+              {ProductStore.isEdit == false
                 ? 'Ürünler Listesi  '
                 : 'Ürün Güncelleniyor'}
             </h1>
             <span>
-              {store.query.length > 0
-                ? 'Bulunan Ürün Sayısı:' + store.filteredProducts.length
-                : 'Toplam Ürün Sayısı:' + store.products.length}
+              {ProductStore.query.length > 0
+                ? 'Bulunan Ürün Sayısı:' + ProductStore.filteredProducts.length
+                : 'Toplam Ürün Sayısı:' + ProductStore.products.length}
             </span>
           </Col>
         </Row>
@@ -122,19 +128,19 @@ class ProductList extends Component {
             <Row>
               <Col>
                 <TextField
-                  value={store.product.name}
+                  value={ProductStore.product.name}
                   onChange={this.handleNameChange.bind(this)}
                   placeholder="Ürün Adı"
                   name="name"
                 />
                 <TextField
-                  value={store.product.price}
+                  value={ProductStore.product.price}
                   onChange={this.handlePriceChange.bind(this)}
                   placeholder="Ürün Fiyatı"
                   name="price"
                 />
                 <TextField
-                  value={store.product.description}
+                  value={ProductStore.product.description}
                   onChange={this.handleDescChange.bind(this)}
                   placeholder="Ürün Açıklaması"
                   name="description"
@@ -143,17 +149,17 @@ class ProductList extends Component {
             </Row>
             <Row>
               <Col>
-                {store.isEdit == false ? (
+                {ProductStore.isEdit == false ? (
                   <Button success onClick={this.addProduct.bind(this)}>
                     Ekle
                   </Button>
                 ) : null}
-                {store.isEdit == true ? (
+                {ProductStore.isEdit == true ? (
                   <Col>
                     <Button update onClick={this.updateProduct.bind(this)}>
                       Kaydet
                     </Button>
-                    <Button delete onClick={this.resetstore.bind(this)}>
+                    <Button delete onClick={this.resetProductStore.bind(this)}>
                       İptal
                     </Button>
                   </Col>
@@ -164,7 +170,7 @@ class ProductList extends Component {
         </Row>
         <Row>
           <Col>
-            <span>{store.message}</span>
+            <span>{ProductStore.message}</span>
           </Col>
         </Row>
         <Row>
@@ -172,7 +178,7 @@ class ProductList extends Component {
             <TextField
               full
               search
-              value={store.query}
+              value={ProductStore.query}
               onChange={this.handleSearchChange.bind(this)}
               placeholder="Aramak için ürün adı girin"
               name="search"
@@ -193,11 +199,11 @@ class ProductList extends Component {
                 </tr>
               </thead>
               <tbody align="center">
-                {store.filteredProducts.length > 0
-                  ? store.filteredProducts.map(product => (
+                {ProductStore.filteredProducts.length > 0
+                  ? ProductStore.filteredProducts.map(product => (
                       <tr key={product._id}>
                         <th scope="row">
-                          {store.filteredProducts.indexOf(product) + 1}
+                          {ProductStore.filteredProducts.indexOf(product) + 1}
                         </th>
                         <td>{product._id}</td>
                         <td>{product.name}</td>
@@ -219,12 +225,12 @@ class ProductList extends Component {
                         </td>
                       </tr>
                     ))
-                  : store.query.length > 0 && store.filteredProducts.length == 0
+                  : ProductStore.query.length > 0 && ProductStore.filteredProducts.length == 0
                   ? null
-                  : store.products.map(product => (
+                  : ProductStore.products.map(product => (
                       <tr key={product._id}>
                         <th scope="row">
-                          {store.products.indexOf(product) + 1}
+                          {ProductStore.products.indexOf(product) + 1}
                         </th>
                         <td>{product._id}</td>
                         <td>{product.name}</td>

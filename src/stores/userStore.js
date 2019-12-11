@@ -7,7 +7,7 @@ const cryptr = new Cryptr('secretCryptoKey');
 class UserStore {
   @observable users = [];
   @observable isEdit = false;
-  @observable isAuth = false;
+  @observable isAuth = null;
   @observable isEmailEmpty = true;
   @observable isPasswordEmpty = true;
   @observable message = '';
@@ -60,27 +60,32 @@ class UserStore {
   }
 
   @action userAuth() {
+    const cryptedToken = localStorage.getItem('token');
+    var decryptedToken;
+    if (cryptedToken != null || undefined) {
+      try {
+        decryptedToken = cryptr.decrypt(cryptedToken);
+      } catch {
+        Router.push('/');
+      }
+    } else {
+      Router.push('/');
+    }
     axios
-      .post(
-        'https://api-4f.herokuapp.com/api/users/authentication',
-        {
-          token:cryptr.decrypt(localStorage.getItem('token'))
-        },
-      )
-      .then(res => {
-        console.log(JSON.stringify(res));
+      .post('https://api-4f.herokuapp.com/api/users/authentication', {
+        token: decryptedToken,
       })
-      .catch(res => {
-        console.log('Error:' + res.message);
+      .then(res => {
+        res.data.success ? (this.isAuth = true) : (this.isAuth = false);
+      })
+      .catch(err => {
+        console.log(err);
       });
   }
 
   @action userDelete() {
     axios
       .delete('https://api-4f.herokuapp.com/api/users/' + this.user.id)
-      .then(res => {
-        console.log(res.status);
-      })
       .catch(err => {
         console.log(err);
       });
@@ -88,7 +93,7 @@ class UserStore {
 
   @action userUpdate() {
     axios
-      .put('https://api-4f.herokuapp.com/api/users/' + this.user.id, {
+      .put('http://localhost:5000/api/users/' + this.user.id, {
         email: this.user.email,
         password: this.user.password,
       })
@@ -101,7 +106,7 @@ class UserStore {
   }
 
   @action getAll() {
-    axios.get('https://api-4f.herokuapp.com/api/users/').then(res => {
+    axios.get('http://localhost:5000api/users/').then(res => {
       this.users = res.users;
     });
     console.log(this.users);
