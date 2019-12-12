@@ -20,10 +20,10 @@ class UserStore {
 
   @action userLogin() {
     axios
-      .post('https://api-4f.herokuapp.com/api/users/login', {
+      .post('http://localhost:5000/api/users/login', {
         email: this.user.email,
         password: this.user.password,
-      })
+      },)
       .then(res => {
         console.log(res);
         if (res.data.success) {
@@ -41,7 +41,7 @@ class UserStore {
 
   @action userRegister() {
     axios
-      .post('https://api-4f.herokuapp.com/api/users/register', {
+      .post('http://localhost:5000/api/users/register', {
         email: this.user.email,
         password: this.user.password,
       })
@@ -72,7 +72,7 @@ class UserStore {
       Router.push('/');
     }
     axios
-      .post('https://api-4f.herokuapp.com/api/users/authentication', {
+      .post('http://localhost:5000/api/users/authentication', {
         token: decryptedToken,
       })
       .then(res => {
@@ -85,7 +85,7 @@ class UserStore {
 
   @action userDelete() {
     axios
-      .delete('https://api-4f.herokuapp.com/api/users/' + this.user.id)
+      .delete('http://localhost:5000/api/users/' + this.user.id)
       .catch(err => {
         console.log(err);
       });

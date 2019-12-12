@@ -17,7 +17,7 @@ class ProductStore {
   @action addProduct() {
     console.log(this.name);
     axios
-      .post('https://api-4f.herokuapp.com/api/products', {
+      .post('http://localhost:5000/api/products', {
         name: this.product.name,
         price: this.product.price,
         description: this.product.description,
@@ -34,7 +34,7 @@ class ProductStore {
     
     console.log(this.product.id);
     axios
-      .delete('https://api-4f.herokuapp.com/api/products/' + this.product.id)
+      .delete('http://localhost:5000/api/products/' + this.product.id)
       .then(res => {
         console.log(res);
         res.status == 200 ? this.getAll() : alert('ERROR');
@@ -43,7 +43,7 @@ class ProductStore {
 
   @action updateProduct() {
     axios
-      .put('https://api-4f.herokuapp.com/api/products/' + this.product.id, {
+      .put('http://localhost:5000/api/products/' + this.product.id, {
         name: this.product.name,
         price: this.product.price,
         description: this.product.description,
@@ -57,7 +57,7 @@ class ProductStore {
   }
 
   @action getAll() {
-    axios.get('https://api-4f.herokuapp.com/api/products').then(res => {
+    axios.get('http://localhost:5000/api/products').then(res => {
       this.products = res.data.products;
       this.setFilteredProducts(
         this.products.filter(product =>
