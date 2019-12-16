@@ -11,7 +11,6 @@ class Products extends Component {
       <Provider ProductStore={productStore} UserStore={userStore}>
         <Head>
           <title>4F ~ Ürünler Listesi</title>
-          <link rel="icon" type="image/jpg" href="https://image.flaticon.com/icons/png/512/123/123300.png"/>
         </Head>
         <ProductList></ProductList>
       </Provider>

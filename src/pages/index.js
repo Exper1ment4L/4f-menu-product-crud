@@ -10,7 +10,6 @@ class Home extends Component {
       <Provider store={store}>
         <Head>
           <title>4F ~ Admin</title>
-          <link rel="icon" type="image/jpg" href="https://img.icons8.com/metro/26/000000/lock.png"/>
         </Head>
         <Login></Login>
       </Provider>
