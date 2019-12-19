@@ -2,6 +2,9 @@ import { observable, action } from 'mobx';
 import axios from 'axios';
 
 class ProductStore {
+
+  // States 
+  
   @observable products = [];
   @observable filteredProducts = [];
   @observable isEdit = false;
@@ -53,8 +56,7 @@ class ProductStore {
   }
 
   @action getAll() {
-    axios.get('http://localhost:5000/api/products/')
-    .then(res => {
+    axios.get('http://localhost:5000/api/products/').then(res => {
       this.products = res.data.products;
       this.setFilteredProducts(
         this.products.filter(product =>
@@ -63,12 +65,10 @@ class ProductStore {
       );
       this.setMessage(res.data.message);
     });
-   return this.products;
+    return this.products;
   }
 
-  @action getAllCache() {
-    
-  }
+  @action getAllCache() {}
 
   @action setId(id) {
     this.product.id = id;

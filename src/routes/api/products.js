@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const redis = require('../../middleware/redis');
-const axios = require('axios');
 
 // Product Model
 const Product = require('../../models/Product');
 
+// [GET] Fetch from cache until database has change
 router.get('/', redis.checkCache, (req, res) => {
   const promise = Product.find({});
   promise
@@ -17,10 +17,11 @@ router.get('/', redis.checkCache, (req, res) => {
         products,
       })
     )
+    .then(redis.updateCache())
     .catch(() => res.json({ success: false, message: 'Kayıtlı ürün yok' }));
-    axios.get('http://localhost:5000/api/products/products');
 });
 
+// [GET] Fetch products from database and set cache
 router.get('/products', (req, res) => {
   const promise = Product.find({});
   promise
@@ -36,6 +37,7 @@ router.get('/products', (req, res) => {
   promise.then(products => redis.setCache('products', products));
 });
 
+// [PUT] Product update by id
 router.put('/update/:id', (req, res) => {
   Product.findByIdAndUpdate(
     {
@@ -45,11 +47,11 @@ router.put('/update/:id', (req, res) => {
     { new: true }
   )
     .then(product => res.json({ success: true, product }))
+    .then(redis.updateCache())
     .catch(() => res.json({ success: false, message: 'Ürün güncellenemedi' }));
-
-  axios.get('http://localhost:5000/api/products/products');
 });
 
+// [POST] Add new product
 router.post('/add/', (req, res) => {
   const newProduct = new Product({
     name: req.body.name,
@@ -59,19 +61,18 @@ router.post('/add/', (req, res) => {
   newProduct
     .save()
     .then(product => res.json({ success: true, product }))
+    .then(redis.updateCache())
     .catch(() => res.json({ success: false, message: 'Ürün eklenemedi' }));
-
-  axios.get('http://localhost:5000/api/products/products');
 });
 
+// [DELETE] Delete product by id
 router.delete('/delete/:id', (req, res) => {
   Product.findById(req.params.id)
     .then(product =>
       product.remove().then(res.json({ success: true, message: 'Silindi' }))
     )
+    .then(redis.updateCache())
     .catch(() => res.json({ success: false, message: 'Ürün silinemedi' }));
-
-  axios.get('http://localhost:5000/api/products/products');
 });
 
 module.exports = router;

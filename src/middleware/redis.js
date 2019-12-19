@@ -1,5 +1,6 @@
 const redis = require('redis');
 const client = redis.createClient();
+const axios = require('axios');
 
 module.exports = {
   setCache: (key, data) => {
@@ -7,7 +8,6 @@ module.exports = {
   },
   checkCache: (req, res, next) => {
     const key = 'products';
-
     client.get(key, (err, data) => {
       if (err) {
         console.log(err);
@@ -28,5 +28,8 @@ module.exports = {
   },
   delCache: key => {
     client.del(key);
+  },
+  updateCache: () => {
+    axios.get('http://localhost:5000/api/products/products');
   },
 };

@@ -3,7 +3,7 @@ import ProductList from '../components/Product/ProductList';
 import { Provider } from 'mobx-react';
 import productStore from '../stores/productStore';
 import userStore from '../stores/userStore';
-import Head from 'next/head'; 
+import Head from 'next/head';
 
 class Products extends Component {
   render() {

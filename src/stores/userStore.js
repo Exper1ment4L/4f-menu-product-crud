@@ -5,6 +5,9 @@ import Cryptr from 'cryptr';
 const cryptr = new Cryptr('secretCryptoKey');
 
 class UserStore {
+  
+  // States
+
   @observable users = [];
   @observable isEdit = false;
   @observable isAuth = null;
@@ -23,11 +26,9 @@ class UserStore {
       .post('http://localhost:5000/api/users/login', {
         email: this.user.email,
         password: this.user.password,
-      },)
+      })
       .then(res => {
-        console.log(res);
         if (res.data.success) {
-          this.setToken(res.data.token);
           localStorage.setItem('token', cryptr.encrypt(res.data.token));
           Router.push('/products');
         } else {
@@ -48,8 +49,7 @@ class UserStore {
       .then(res => {
         if (res.data.success) {
           this.setMessage('Kayıt başarılı giriş yapabilirsiniz.');
-          this.setEmail('');
-          this.setPassword('');
+          this.resetData(); // Username password reset after register
         } else {
           this.setMessage(res.data.message);
         }
@@ -143,6 +143,11 @@ class UserStore {
 
   @action setToken(token) {
     this.user.token = token;
+  }
+
+  @action resetData() {
+    this.user.email = '';
+    this.user.password ='';
   }
 }
 
