@@ -19,7 +19,7 @@
     "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",
     "mongoose": "^5.7.14",
-    "next": "9.0.7",
+    "next": "9.3.2",
     "react": "16.10.1",
     "react-dom": "16.10.1",
     "react-router-dom": "^5.1.2",
