@@ -11,9 +11,8 @@ import Container from '../Container';
 class Login extends Component {
   componentDidMount() {
     const { store } = this.props;
-    store.setEmail('');
+    store.resetData();
     store.setMessage('');
-    store.setPassword('');
   }
 
   userLogin() {
@@ -52,7 +51,7 @@ class Login extends Component {
       <Container>
         <Row>
           <Col>
-            <h2>Lütfen Giriş Yapınız</h2>
+            <h2>Yönetim</h2>
           </Col>
         </Row>
         <Row>
@@ -73,7 +72,6 @@ class Login extends Component {
             <br />
             <h3>{store.message}</h3>
             <Button submit onClick={this.userLogin.bind(this)}>
-              {' '}
               Giriş Yap
             </Button>
             <Button submit onClick={this.userRegister.bind(this)}>

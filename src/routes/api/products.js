@@ -1,17 +1,44 @@
 const express = require('express');
 const router = express.Router();
+const redis = require('../../middleware/redis');
 
 // Product Model
 const Product = require('../../models/Product');
 
-router.get('/', (req, res) => {
+// [GET] Fetch from cache until database has change
+router.get('/', redis.checkCache, (req, res) => {
   const promise = Product.find({});
   promise
-    .then(products => res.json({ success: true, products }))
+    .then(products =>
+      res.json({
+        length: products.length,
+        success: true,
+        from: 'Database',
+        products,
+      })
+    )
+    .then(redis.updateCache())
     .catch(() => res.json({ success: false, message: 'Kayıtlı ürün yok' }));
 });
 
-router.put('/:id', (req, res) => {
+// [GET] Fetch products from database and set cache
+router.get('/products', (req, res) => {
+  const promise = Product.find({});
+  promise
+    .then(products =>
+      res.json({
+        length: products.length,
+        success: true,
+        from: 'Database',
+        products,
+      })
+    )
+    .catch(() => res.json({ success: false, message: 'Kayıtlı ürün yok' }));
+  promise.then(products => redis.setCache('products', products));
+});
+
+// [PUT] Product update by id
+router.put('/update/:id', (req, res) => {
   Product.findByIdAndUpdate(
     {
       _id: req.params.id,
@@ -20,10 +47,12 @@ router.put('/:id', (req, res) => {
     { new: true }
   )
     .then(product => res.json({ success: true, product }))
+    .then(redis.updateCache())
     .catch(() => res.json({ success: false, message: 'Ürün güncellenemedi' }));
 });
 
-router.post('/', (req, res) => {
+// [POST] Add new product
+router.post('/add/', (req, res) => {
   const newProduct = new Product({
     name: req.body.name,
     price: req.body.price,
@@ -31,15 +60,18 @@ router.post('/', (req, res) => {
   });
   newProduct
     .save()
-    .then(product =>
-      res.json({ success: true, message: 'Ürün eklendi', product })
-    )
+    .then(product => res.json({ success: true, product }))
+    .then(redis.updateCache())
     .catch(() => res.json({ success: false, message: 'Ürün eklenemedi' }));
 });
 
-router.delete('/:id', (req, res) => {
+// [DELETE] Delete product by id
+router.delete('/delete/:id', (req, res) => {
   Product.findById(req.params.id)
-    .then(product => product.remove().then(() => res.json({ success: true })))
+    .then(product =>
+      product.remove().then(res.json({ success: true, message: 'Silindi' }))
+    )
+    .then(redis.updateCache())
     .catch(() => res.json({ success: false, message: 'Ürün silinemedi' }));
 });
 

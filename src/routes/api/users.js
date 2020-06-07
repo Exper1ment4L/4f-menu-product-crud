@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const apiKey = require('../../config/keys').apiKEY;
 const bcrypt = require('bcryptjs');
-const salt = 12;
+const verifyToken = require('../../middleware/token');
 const User = require('../../models/User');
+const salt = 12;
+const apiKey = require('../../config/keys').apiKEY;
 
-// GET ALL USERS
+// [GET] Fetch users from database
 router.get('/', (req, res) => {
   const promise = User.find({});
   promise.then(users => {
@@ -16,7 +17,7 @@ router.get('/', (req, res) => {
   });
 });
 
-// GET USER BY ID
+// [GET] Fetch user by id
 router.get('/:id', (req, res) => {
   const promise = User.findById({ _id: req.params.id });
   promise
@@ -31,7 +32,7 @@ router.get('/:id', (req, res) => {
     });
 });
 
-// DELETE USER DELETE
+// [DELETE] Delete user by id
 router.delete('/:id', (req, res) => {
   User.findById(req.params.id)
     .then(user =>
@@ -42,7 +43,7 @@ router.delete('/:id', (req, res) => {
     .catch(() => res.status(404).json({ success: false }));
 });
 
-// POST USER REGISTRATION
+// [POST] New user registration / add
 router.post('/register', (req, res) => {
   const newUser = new User({
     email: req.body.email,
@@ -61,7 +62,7 @@ router.post('/register', (req, res) => {
   });
 });
 
-// POST USER LOGIN
+// [POST] User login
 router.post('/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -73,7 +74,11 @@ router.post('/login', (req, res) => {
       if (isMatch) {
         const payload = { id: user._id, email: user.email };
         jwt.sign(payload, apiKey, { expiresIn: '1h' }, (err, token) => {
-          res.json({ success: true, token: 'Bearer ' + token });
+          res.json({
+            success: true,
+            token: 'Bearer ' + token,
+            message: 'Giriş başarılı.. Yönlendiriliyorsunuz.',
+          });
         });
       } else {
         res.json({ success: false, message: 'Hatalı Şifre' });
@@ -82,7 +87,7 @@ router.post('/login', (req, res) => {
   });
 });
 
-// POST USER AUTHENTICATION
+// [POST] User authentication by JWT Bearer token
 router.post('/authentication', verifyToken, (req, res) => {
   jwt.verify(req.token, apiKey, (err, authData) => {
     if (err) {
@@ -92,19 +97,5 @@ router.post('/authentication', verifyToken, (req, res) => {
     }
   });
 });
-
-// VERIFY TOKEN
-// FORMAT : Bearer <token>
-function verifyToken(req, res, next) {
-  const bearerToken = req.body.token;
-  if (typeof bearerToken !== 'undefined') {
-    const bearer = bearerToken.split(' ');
-    const token = bearer[1];
-    req.token = token;
-    next();
-  } else {
-    res.status(403);
-  }
-}
 
 module.exports = router;

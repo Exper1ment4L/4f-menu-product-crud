@@ -11,13 +11,13 @@ import { inject, observer } from 'mobx-react';
 @observer
 class ProductList extends Component {
   componentDidMount() {
-    const { ProductStore , UserStore} = this.props;
+    const { ProductStore, UserStore } = this.props;
     ProductStore.getAll();
     UserStore.userAuth();
   }
 
   addProduct() {
-    const { ProductStore , UserStore} = this.props;
+    const { ProductStore, UserStore } = this.props;
     if (
       ProductStore.product.name.length > 0 &&
       ProductStore.product.price > 0 &&
@@ -32,7 +32,7 @@ class ProductList extends Component {
   }
 
   updateProduct() {
-    const { ProductStore, UserStore} = this.props;
+    const { ProductStore, UserStore } = this.props;
     if (
       ProductStore.product.name.length > 0 &&
       ProductStore.product.price > 0 &&
@@ -49,7 +49,7 @@ class ProductList extends Component {
   deleteProduct(id) {
     const { ProductStore, UserStore } = this.props;
     ProductStore.setId(id);
-    if(UserStore.isAuth) {
+    if (UserStore.isAuth) {
       if (confirm('Ürün silinsin mi?')) {
         ProductStore.deleteProduct(id);
       }
@@ -225,7 +225,9 @@ class ProductList extends Component {
                         </td>
                       </tr>
                     ))
-                  : ProductStore.query.length > 0 && ProductStore.filteredProducts.length == 0
+                  : ProductStore.query.length >
+                      ProductStore.filteredProducts.length ==
+                    0
                   ? null
                   : ProductStore.products.map(product => (
                       <tr key={product._id}>
